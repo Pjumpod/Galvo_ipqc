@@ -35,7 +35,10 @@ def measInductance(visa_port: str, freq: str):
         # clear buffer.
         myinst.write("*IDN?")
         str_read = myinst.read()
-        myinst.write("SYST:RES FETCH")
+        myinst.write("DISP:PAGE MEAS")
+        myinst.write("APER SLOW")
+        myinst.write("FUNC Ls-Q")
+        myinst.write("FUNC:RANGe:AUTO on")
         myinst.write(f"FREQ {freq}")
         myinst.write("FETCH?")
         str_read = str(myinst.read())
