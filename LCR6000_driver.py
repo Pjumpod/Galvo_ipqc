@@ -22,3 +22,26 @@ def init(visa_port: str):
         myinst.close()
         print('Exception : ' + str(err))
         return visa_port + ": " + str(err)
+    
+
+def measInductance(visa_port: str, freq: str):
+    rm = visa.ResourceManager()
+    try:
+        myinst = rm.open_resource(visa_port)
+    except Exception as err:
+        print('Exception : ' + str(err))
+        return float(-99999998)
+    try:
+        # clear buffer.
+        myinst.write("*IDN?")
+        str_read = myinst.read()
+        myinst.write("SYST:RES FETCH")
+        myinst.write(f"FREQ {freq}")
+        myinst.write("FETCH?")
+        str_read = str(myinst.read())
+        inductance = str_read.split(',')[0]
+        return float(inductance)
+    except Exception as err:
+        myinst.close()
+        print('Exception : ' + str(err))
+        return float(-99999999)
