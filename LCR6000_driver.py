@@ -1,10 +1,11 @@
 import pyvisa as visa
 
 
-def init(visa_port: str):
+def init(visa_port: str, baud: int):
     rm = visa.ResourceManager()
     try:
         myinst = rm.open_resource(visa_port)
+        myinst.baud_rate = baud
     except Exception as err:
         print('Exception : ' + str(err))
         return visa_port + ": " +  str(err)
@@ -24,10 +25,11 @@ def init(visa_port: str):
         return visa_port + ": " + str(err)
     
 
-def measInductance(visa_port: str, freq: str):
+def measInductance(visa_port: str, baud:int, freq: str):
     rm = visa.ResourceManager()
     try:
         myinst = rm.open_resource(visa_port)
+        myinst.baud_rate = baud
     except Exception as err:
         print('Exception : ' + str(err))
         return float(-99999998)
