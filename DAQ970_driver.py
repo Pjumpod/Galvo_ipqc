@@ -1,5 +1,4 @@
 import pyvisa as visa
-import time
 
 def init(visa_port: str, baud: int):
     rm = visa.ResourceManager()
