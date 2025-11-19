@@ -18,9 +18,14 @@ def init(visa_port: str, baud: int):
         myinst.write("*IDN?")
         str_read = myinst.read()
         myinst.close()
+        rm.close()
         return str_read
     except Exception as err:
-        myinst.close()
+        try:
+            myinst.close()
+        except:
+            print('error in close instrument')
+        rm.close()
         print('Exception : ' + str(err))
         return visa_port + ": " + str(err)
     
@@ -45,8 +50,14 @@ def measInductance(visa_port: str, baud:int, freq: str):
         myinst.write("FETCH?")
         str_read = str(myinst.read())
         inductance = str_read.split(',')[0]
+        myinst.close()
+        rm.close()
         return float(inductance)
     except Exception as err:
-        myinst.close()
+        try:
+            myinst.close()
+        except:
+            print('error in close instrument')
+        rm.close()
         print('Exception : ' + str(err))
         return float(-99999999)
