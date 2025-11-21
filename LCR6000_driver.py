@@ -61,3 +61,35 @@ def measInductance(visa_port: str, baud:int, freq: str):
         rm.close()
         print('Exception : ' + str(err))
         return float(-99999999)
+    
+
+def measResistance(visa_port: str, baud:int):
+    rm = visa.ResourceManager()
+    try:
+        myinst = rm.open_resource(visa_port)
+        myinst.baud_rate = baud
+    except Exception as err:
+        print('Exception : ' + str(err))
+        return float(-99999998)
+    try:
+        # clear buffer.
+        myinst.write("*IDN?")
+        str_read = myinst.read()
+        myinst.write("DISP:PAGE MEAS")
+        myinst.write("APER SLOW")
+        myinst.write("FUNC R-X")
+        myinst.write("FUNC:RANGe:AUTO on")
+        myinst.write("FETCH?")
+        str_read = str(myinst.read())
+        inductance = str_read.split(',')[0]
+        myinst.close()
+        rm.close()
+        return float(inductance)
+    except Exception as err:
+        try:
+            myinst.close()
+        except:
+            print('error in close instrument')
+        rm.close()
+        print('Exception : ' + str(err))
+        return float(-99999999)
