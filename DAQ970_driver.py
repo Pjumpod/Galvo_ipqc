@@ -23,32 +23,7 @@ def init(visa_port: str, baud: int):
         print('Exception : ' + str(err))
         return visa_port + ": " + str(err)
 
-def measResistance(visa_port: str, baud: int, channel: str):
-    rm = visa.ResourceManager()
-    try:
-        DAQ970A = rm.open_resource(visa_port)
-        DAQ970A.baud_rate = baud
-    except Exception as err:
-        print('Exception : ' + str(err))
-        return float(-99999998)
-    try:
-        resistance = DAQ970A.query('*IDN?') # clear buffer
-        DAQ970A.write(':INSTrument:DMM 1') # turn on the DMM
-        resistance = DAQ970A.query(f'MEAS:RES? 1000,1,(@{channel})')
-        DAQ970A.close()
-        rm.close()
-        return float(resistance)
-    except Exception as err:
-        try:
-            DAQ970A.close()
-        except:
-            print('error in close instrument')
-        rm.close()
-        print('Exception : ' + str(err))
-        return float(-99999999)
-
-
-def route(visa_port: str, baud: int, channel: str):
+def routeonly(visa_port: str, baud: int, channel: str):
     rm = visa.ResourceManager()
     try:
         DAQ970A = rm.open_resource(visa_port)
@@ -57,10 +32,31 @@ def route(visa_port: str, baud: int, channel: str):
         print('Exception : ' + str(err))
         return visa_port + ": " + str(err)
     try:
-        temp_str = DAQ970A.query('*IDN?') # clear buffer
-        DAQ970A.write(':INSTrument:DMM 0') # turn on the DMM
-        DAQ970A.write(':ROUTe:CHANnel:ADVance:SOURce EXTernal')
-        DAQ970A.write(f':ROUTe:CHANnel:FWIRe 0,(@{channel})')
+        temp_str = DAQ970A.query('*IDN?') 
+        DAQ970A.write(f'ROUTe:CLOSe (@{channel})')
+        DAQ970A.close()
+        rm.close()
+        return "Success"
+    except Exception as err:
+        try:
+            DAQ970A.close()
+        except:
+            print('error in close instrument')
+        rm.close()
+        print('Exception : ' + str(err))
+        return visa_port + ": " + str(err)
+    
+def openall_route(visa_port: str, baud: int, channel: str):
+    rm = visa.ResourceManager()
+    try:
+        DAQ970A = rm.open_resource(visa_port)
+        DAQ970A.baud_rate = baud
+    except Exception as err:
+        print('Exception : ' + str(err))
+        return visa_port + ": " + str(err)
+    try:
+        temp_str = DAQ970A.query('*IDN?') 
+        DAQ970A.write(f'ROUTe:CLOSe:EXCLusive (@{channel})')
         DAQ970A.close()
         rm.close()
         return "Success"
