@@ -35,7 +35,7 @@ def measSensor():
     if oFUTEKDeviceRepoDLL.DeviceCount > 0:
         print("Device connected.")
         for num in range(1, 11):
-            measSensor[num] = FUTEK.Devices.DeviceUSB225.GetChannelXReading(USB225, 0)
+            measSensor.append(FUTEK.Devices.DeviceUSB225.GetChannelXReading(USB225, 0))
         oFUTEKDeviceRepoDLL.DisconnectAllDevices()
         measData = sum(measSensor) / len(measSensor)
         return str(measData)
