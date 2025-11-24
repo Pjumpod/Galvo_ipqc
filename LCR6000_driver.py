@@ -1,5 +1,5 @@
 import pyvisa as visa
-
+import time
 
 def init(visa_port: str, baud: int):
     rm = visa.ResourceManager()
@@ -16,6 +16,7 @@ def init(visa_port: str, baud: int):
         myinst.write("SYST:SHAK OFF")
         myinst.write("SYST:CODE OFF")
         myinst.write("*IDN?")
+        time.sleep(2)
         str_read = myinst.read()
         myinst.close()
         rm.close()
