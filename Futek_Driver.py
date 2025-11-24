@@ -27,7 +27,7 @@ def measSensor():
         print("FUTEK Devices DLL initialized.")
     except Exception as e:
         print(f"Error initializing FUTEK Devices DLL: {e}")
-        return f"Error initializing FUTEK Devices DLL: {e}"
+        return float(-99999998)
     devices = oFUTEKDeviceRepoDLL.DetectDevices()
     USB225 = devices[0] if devices else None
 
@@ -39,11 +39,11 @@ def measSensor():
         oFUTEKDeviceRepoDLL.DisconnectAllDevices()
         measData = sum(measSensor) / len(measSensor)
         measData = measData * 7.0616 # conversion from in-oz. to N-mm.
-        return str(measData)
+        return float(measData)
     else:
         print("No device connected.")
         oFUTEKDeviceRepoDLL.DisconnectAllDevices()
-        return "Error No device connected."
+        return float(-99999999)
     
 
 def getModelNumber():
