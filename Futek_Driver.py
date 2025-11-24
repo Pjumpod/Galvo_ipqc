@@ -38,6 +38,7 @@ def measSensor():
             measSensor.append(FUTEK.Devices.DeviceUSB225.GetChannelXReading(USB225, 0))
         oFUTEKDeviceRepoDLL.DisconnectAllDevices()
         measData = sum(measSensor) / len(measSensor)
+        measData = measData * 7.0616 # conversion from in-oz. to N-mm.
         return str(measData)
     else:
         print("No device connected.")
