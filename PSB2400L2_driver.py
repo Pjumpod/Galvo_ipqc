@@ -64,8 +64,8 @@ def output_on(visa_port: str, baud: int):
     try:
         myinst.write(":POW:A 2.5")
         myinst.write(":CURR:A 1")
-        myinst.write(":VOLT:A 1")
-        myinst.write(":VOLT:PROT:A 2.5")
+        myinst.write(":VOLT:A 3")
+        myinst.write(":VOLT:PROT:A 3.1")
         myinst.write(":OUTP:A 1")
         time.sleep(0.1)
         myinst.close()
