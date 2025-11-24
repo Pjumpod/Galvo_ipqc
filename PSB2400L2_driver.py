@@ -1,4 +1,5 @@
 import pyvisa as visa
+import time
 
 
 def init(visa_port: str, baud: int):
@@ -59,12 +60,14 @@ def output_on(visa_port: str, baud: int):
         myinst.baud_rate = int(baud)
     except Exception as err:
         print('Exception : ' + str(err))
-        return visa_port + ": " +  str(err)
+        return "0 " + visa_port + ": " +  str(err)
     try:
         myinst.write(":POW:A 2.5")
         myinst.write(":CURR:A 1")
+        myinst.write(":VOLT:A 1")
         myinst.write(":VOLT:PROT:A 2.5")
         myinst.write(":OUTP:A 1")
+        time.sleep(0.1)
         myinst.close()
         rm.close()
         return "SUCCESS"
@@ -75,4 +78,4 @@ def output_on(visa_port: str, baud: int):
             print('error in close instrument')
         rm.close()
         print('Exception : ' + str(err))
-        return visa_port + ": " + str(err)
+        return "1 " + visa_port + ": " + str(err)
