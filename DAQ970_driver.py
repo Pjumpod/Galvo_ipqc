@@ -4,7 +4,7 @@ def init(visa_port: str, baud: int):
     rm = visa.ResourceManager()
     try:
         DAQ970A = rm.open_resource(visa_port)
-        DAQ970A.baud_rate = baud
+        DAQ970A.baud_rate = int(baud)
     except Exception as err:
         print('Exception : ' + str(err))
         return visa_port + ": " +  str(err)
@@ -27,7 +27,7 @@ def routeonly(visa_port: str, baud: int, channel: str):
     rm = visa.ResourceManager()
     try:
         DAQ970A = rm.open_resource(visa_port)
-        DAQ970A.baud_rate = baud
+        DAQ970A.baud_rate = int(baud)
     except Exception as err:
         print('Exception : ' + str(err))
         return visa_port + ": " + str(err)
@@ -50,7 +50,7 @@ def openall_route(visa_port: str, baud: int, channel: str):
     rm = visa.ResourceManager()
     try:
         DAQ970A = rm.open_resource(visa_port)
-        DAQ970A.baud_rate = baud
+        DAQ970A.baud_rate = int(baud)
     except Exception as err:
         print('Exception : ' + str(err))
         return visa_port + ": " + str(err)

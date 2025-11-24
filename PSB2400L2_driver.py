@@ -5,7 +5,7 @@ def init(visa_port: str, baud: int):
     rm = visa.ResourceManager()
     try:
         myinst = rm.open_resource(visa_port)
-        myinst.baud_rate = baud
+        myinst.baud_rate = int(baud)
     except Exception as err:
         print('Exception : ' + str(err))
         return visa_port + ": " +  str(err)
@@ -33,7 +33,7 @@ def output_off(visa_port: str, baud: int):
     rm = visa.ResourceManager()
     try:
         myinst = rm.open_resource(visa_port)
-        myinst.baud_rate = baud
+        myinst.baud_rate = int(baud)
     except Exception as err:
         print('Exception : ' + str(err))
         return visa_port + ": " +  str(err)
@@ -56,7 +56,7 @@ def output_on(visa_port: str, baud: int):
     rm = visa.ResourceManager()
     try:
         myinst = rm.open_resource(visa_port)
-        myinst.baud_rate = baud
+        myinst.baud_rate = int(baud)
     except Exception as err:
         print('Exception : ' + str(err))
         return visa_port + ": " +  str(err)
