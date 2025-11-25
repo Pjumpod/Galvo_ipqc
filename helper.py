@@ -64,7 +64,7 @@ def excel(starttime: str, unit_sn: str, seq_name: str, final_result: str, operat
         title = "SN, START TIME, STOP TIME, RESULT, OPERATOR, TEST"
         max = ", , , , , MAX VALUE"
         min = ", , , , , MIN VALUE"
-    loop = range(1, 41)
+    loop = range(1, 5)
     for i in loop:
         if i == 1:
             Parameter = Parameter1
@@ -76,16 +76,6 @@ def excel(starttime: str, unit_sn: str, seq_name: str, final_result: str, operat
             Parameter = Parameter4
         elif i == 5:
             Parameter = Parameter5
-        elif i == 6:
-            Parameter = Parameter6
-        elif i == 7:
-            Parameter = Parameter7
-        elif i == 8:
-            Parameter = Parameter8
-        elif i == 9:
-            Parameter = Parameter9
-        elif i == 10:
-            Parameter = Parameter10
         if Parameter[1] != "":
             if not csv_exist:
                 title += ", " + Parameter[0]

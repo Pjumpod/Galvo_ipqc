@@ -2,6 +2,7 @@ import clr
 clr.AddReference("FUTEK.Devices")
 import FUTEK.Devices
 from FUTEK.Devices import DeviceRepository
+import PSB2400L2_driver
 
 def init():
     try:
@@ -21,7 +22,7 @@ def init():
         return "Error No device connected."
 
 
-def measSensor():
+def measSensor(zerotorque:float, ps_visa: str, ps_baud: int):
     try:
         oFUTEKDeviceRepoDLL = FUTEK.Devices.DeviceRepository()
         print("FUTEK Devices DLL initialized.")
@@ -34,11 +35,21 @@ def measSensor():
     measSensor = []
     if oFUTEKDeviceRepoDLL.DeviceCount > 0:
         print("Device connected.")
-        for num in range(1, 11):
+        if zerotorque == 0:
             measSensor.append(FUTEK.Devices.DeviceUSB225.GetChannelXReading(USB225, 0))
+        else:
+            PSB2400L2_driver.output_turn_on(ps_visa, int(ps_baud))
+            for num in range(1, 201):
+                measSensor.append(FUTEK.Devices.DeviceUSB225.GetChannelXReading(USB225, 0))
+            PSB2400L2_driver.output_off(ps_visa, int(ps_baud))
         oFUTEKDeviceRepoDLL.DisconnectAllDevices()
-        measData = sum(measSensor) / len(measSensor)
-        measData = measData * 7.0616 # conversion from in-oz. to N-mm.
+        # measSensor = measSensor * 7.0616
+        # avgdata = sum(measSensor) / len(measSensor)
+        if ((abs(min(measSensor)) * 7.0616) - zerotorque) > ((abs(max(measSensor)) * 7.0616) - zerotorque):
+            measData = min(measSensor)
+        else:
+            measData = max(measSensor)
+        measData = (measData * 7.0616) - zerotorque
         return float(measData)
     else:
         print("No device connected.")
