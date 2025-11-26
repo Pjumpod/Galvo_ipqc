@@ -54,10 +54,11 @@ def measSensor(zerotorque:float, ps_visa: str, ps_baud: int, prefix_log:str, ser
             measData = max(measSensor)
             start_log = "forward,"
         for num in measSensor:
-            data_to_log.append((measSensor[num] * 7.0616) - zerotorque)
+            data_to_log.append((num * 7.0616) - zerotorque)
         line = start_log + ",".join(map(str, data_to_log))
-        with open(logfile, 'a+', newline='') as file:
-            file.writelines(line)
+        if zerotorque != 0:
+            with open(logfile, 'a+', newline='') as file:
+                file.writelines(line)
         measData = (measData * 7.0616) - zerotorque
         return float(measData)
     else:
