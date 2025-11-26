@@ -64,7 +64,7 @@ def excel(starttime: str, unit_sn: str, seq_name: str, final_result: str, operat
         title = "SN, START TIME, STOP TIME, RESULT, OPERATOR, TEST"
         max = ", , , , , MAX VALUE"
         min = ", , , , , MIN VALUE"
-    loop = range(1, 5)
+    loop = range(1, 6)
     for i in loop:
         if i == 1:
             Parameter = Parameter1
@@ -86,7 +86,7 @@ def excel(starttime: str, unit_sn: str, seq_name: str, final_result: str, operat
             Parameter = Parameter9
         else:
             Parameter = Parameter10
-        if Parameter[1] != "":
+        if "dummy" not in Parameter[0].lower():
             if not csv_exist:
                 title += ", " + Parameter[0]
                 if Parameter[3].lower() != "string":
@@ -95,6 +95,7 @@ def excel(starttime: str, unit_sn: str, seq_name: str, final_result: str, operat
                 else:
                     max += ", "
                     min += ", "
+        if Parameter[1] != "":
             content += ", " + str(Parameter[4])
     file_id = open(logfile_path, 'a+')
     if not csv_exist:
