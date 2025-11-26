@@ -22,7 +22,7 @@ def init():
         return "Error No device connected."
 
 
-def measSensor(zerotorque:float, ps_visa: str, ps_baud: int):
+def measSensor(zerotorque:float, ps_visa: str, ps_baud: int, prefix_log:str, sernum: str):
     try:
         oFUTEKDeviceRepoDLL = FUTEK.Devices.DeviceRepository()
         print("FUTEK Devices DLL initialized.")
@@ -31,8 +31,10 @@ def measSensor(zerotorque:float, ps_visa: str, ps_baud: int):
         return float(-99999998)
     devices = oFUTEKDeviceRepoDLL.DetectDevices()
     USB225 = devices[0] if devices else None
-
+    prefix_log_ = prefix_log.replace("-","").replace(":","").replace(".","")
+    logfile = r"C:\\Report\\" + sernum + "_" + prefix_log_ + ".csv"
     measSensor = []
+    data_to_log = []
     if oFUTEKDeviceRepoDLL.DeviceCount > 0:
         print("Device connected.")
         if zerotorque == 0:
@@ -47,8 +49,15 @@ def measSensor(zerotorque:float, ps_visa: str, ps_baud: int):
         # avgdata = sum(measSensor) / len(measSensor)
         if ((abs(min(measSensor)) * 7.0616) - zerotorque) > ((abs(max(measSensor)) * 7.0616) - zerotorque):
             measData = min(measSensor)
+            start_log = "backward,"
         else:
             measData = max(measSensor)
+            start_log = "forward,"
+        for num in measSensor:
+            data_to_log.append((measSensor[num] * 7.0616) - zerotorque)
+        line = start_log + ",".join(map(str, data_to_log))
+        with open(logfile, 'a+', newline='') as file:
+            file.writelines(line)
         measData = (measData * 7.0616) - zerotorque
         return float(measData)
     else:
