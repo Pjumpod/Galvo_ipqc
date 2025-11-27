@@ -43,16 +43,17 @@ def measSensor(zerotorque:float, ps_visa: str, ps_baud: int, prefix_log:str, ser
             PSB2400L2_driver.output_turn_on(ps_visa, int(ps_baud))
             for num in range(1, 201):
                 measSensor.append(FUTEK.Devices.DeviceUSB225.GetChannelXReading(USB225, 0))
+            ps_status = PSB2400L2_driver.getstatus(ps_visa, int(ps_baud))
             PSB2400L2_driver.output_off(ps_visa, int(ps_baud))
         oFUTEKDeviceRepoDLL.DisconnectAllDevices()
         # measSensor = measSensor * 7.0616
         # avgdata = sum(measSensor) / len(measSensor)
         if ((abs(min(measSensor)) * 7.0616) - zerotorque) > ((abs(max(measSensor)) * 7.0616) - zerotorque):
             measData = min(measSensor)
-            start_log = "backward,"
+            start_log = f"backward ({ps_status}),"
         else:
             measData = max(measSensor)
-            start_log = "forward,"
+            start_log = f"forward ({ps_status}),"
         for num in measSensor:
             data_to_log.append((num * 7.0616) - zerotorque)
         line = start_log + ",".join(map(str, data_to_log)) + '\n'

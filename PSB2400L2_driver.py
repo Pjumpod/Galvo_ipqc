@@ -67,6 +67,7 @@ def output_on(visa_port: str, baud: int):
         myinst.write(":VOLT:A 3")
         myinst.write(":CURR:A 1")
         myinst.write(":VOLT:PROT:A 3.1")
+        myinst.write(":CURR:PROT:A 1")
         myinst.write(":OUTP:A 1")
         time.sleep(0.1)
         myinst.close()
@@ -95,6 +96,29 @@ def output_turn_on(visa_port: str, baud: int):
         myinst.close()
         rm.close()
         return "SUCCESS"
+    except Exception as err:
+        try:
+            myinst.close()
+        except:
+            print('error in close instrument')
+        rm.close()
+        print('Exception : ' + str(err))
+        return "1 " + visa_port + ": " + str(err)
+
+
+def getstatus(visa_port: str, baud: int):
+    rm = visa.ResourceManager()
+    try:
+        myinst = rm.open_resource(visa_port)
+        myinst.baud_rate = int(baud)
+    except Exception as err:
+        print('Exception : ' + str(err))
+        return visa_port + ": " +  str(err)
+    try:
+        myinst.write(":MEAS?")
+        str_read = myinst.read()
+        str_read = str_read.replace(",","-")
+        return str_read
     except Exception as err:
         try:
             myinst.close()
