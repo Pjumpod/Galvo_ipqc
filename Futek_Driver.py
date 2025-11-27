@@ -2,7 +2,7 @@ import clr
 clr.AddReference("FUTEK.Devices")
 import FUTEK.Devices
 from FUTEK.Devices import DeviceRepository
-import PSB2400L2_driver
+import PSB2400L2_driver as power_supply
 
 def init():
     try:
@@ -40,11 +40,11 @@ def measSensor(zerotorque:float, ps_visa: str, ps_baud: int, prefix_log:str, ser
         if zerotorque == 0:
             measSensor.append(FUTEK.Devices.DeviceUSB225.GetChannelXReading(USB225, 0))
         else:
-            PSB2400L2_driver.output_turn_on(ps_visa, int(ps_baud))
+            power_supply.output_turn_on(ps_visa, int(ps_baud))
             for num in range(1, 201):
                 measSensor.append(FUTEK.Devices.DeviceUSB225.GetChannelXReading(USB225, 0))
-            ps_status = PSB2400L2_driver.getstatus(ps_visa, int(ps_baud))
-            PSB2400L2_driver.output_off(ps_visa, int(ps_baud))
+            ps_status = power_supply.getstatus(ps_visa, int(ps_baud))
+            power_supply.output_off(ps_visa, int(ps_baud))
         oFUTEKDeviceRepoDLL.DisconnectAllDevices()
         # measSensor = measSensor * 7.0616
         # avgdata = sum(measSensor) / len(measSensor)
