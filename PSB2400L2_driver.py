@@ -117,7 +117,7 @@ def getstatus(visa_port: str, baud: int):
     try:
         myinst.write(":MEAS?")
         str_read = myinst.read()
-        str_read = str_read.replace(",","-")
+        str_read = str_read.replace(",","-").replace('\n','').replace('\r','')
         return str_read
     except Exception as err:
         try:
