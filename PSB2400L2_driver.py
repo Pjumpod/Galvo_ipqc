@@ -63,7 +63,7 @@ def output_on(visa_port: str, baud: int):
         print('Exception : ' + str(err))
         return "0 " + visa_port + ": " +  str(err)
     try:
-        myinst.write(":POW:A 3")
+        myinst.write(":POW:A 4")
         myinst.write(":VOLT:A 3")
         myinst.write(":CURR:A 1")
         myinst.write(":VOLT:PROT:A 3.1")
