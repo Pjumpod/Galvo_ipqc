@@ -39,6 +39,7 @@ def measSensor(zerotorque:float, ps_visa: str, ps_baud: int, prefix_log:str, ser
         print("Device connected.")
         if zerotorque == 0:
             measSensor.append(FUTEK.Devices.DeviceUSB225.GetChannelXReading(USB225, 0))
+            ps_status = ""
         else:
             power_supply.output_turn_on(ps_visa, int(ps_baud))
             for num in range(1, 201):
